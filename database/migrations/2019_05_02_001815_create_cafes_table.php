@@ -17,7 +17,7 @@ class CreateCafesTable extends Migration
             $table->increments('id')->unsigned();
             $table->integer('id_marca')->unsigned();
             $table->string('nome');
-            $table->string('foto');
+            $table->string('foto')->nullable();
             $table->string('torra');
             $table->string('tipo_de_grao');
             $table->integer('faixa_de_preco')->unsigned();
