@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Marca;
 use Illuminate\Http\Request;
+use App\Http\Resources\MarcaResource;
 
 class MarcaController extends Controller
 {
@@ -14,7 +15,8 @@ class MarcaController extends Controller
      */
     public function index()
     {
-        //
+        $marcas = Marca::paginate(15);
+        return MarcaResource::collection($marcas);
     }
 
     /**
@@ -35,7 +37,16 @@ class MarcaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nome' => 'required'
+        ]);
+
+        $marca = Marca::create($request->all());
+
+        return response()->json([
+            'mensagem' => 'Concluído! Marca Adicionada.',
+            'marca' => $marca
+        ], 201);
     }
 
     /**
@@ -46,7 +57,9 @@ class MarcaController extends Controller
      */
     public function show(Marca $marca)
     {
-        //
+        MarcaResource::withoutWrapping();
+        return (new MarcaResource($marca))
+        ->response([200]);
     }
 
     /**
@@ -69,7 +82,13 @@ class MarcaController extends Controller
      */
     public function update(Request $request, Marca $marca)
     {
-        //
+        $request->validate([
+            'nome' => 'required'
+        ]);
+
+        $marca->update($request->all());
+
+        return response('', 204);
     }
 
     /**
@@ -80,6 +99,7 @@ class MarcaController extends Controller
      */
     public function destroy(Marca $marca)
     {
-        //
+        $marca->delete();
+        return response('', 204);
     }
 }
